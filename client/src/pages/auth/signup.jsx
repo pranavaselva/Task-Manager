@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import axios from "axios"; // Import axios
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -17,32 +18,27 @@ const Signup = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-  try {
-    const response = await fetch("http://localhost:5000/api/signup", {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-      },
-      credentials: 'include', // Important for cookies/sessions
-      body: JSON.stringify(formData),
-    });
+    try {
+      const response = await axios.post("http://localhost:3000/api/signup", formData, {
+        withCredentials: true, // Ensure cookies/sessions work
+        headers: { "Content-Type": "application/json" },
+      });
 
-    const data = await response.json();
-    if (response.ok) {
-      toast.success("Signup successful! Redirecting to Login...");
-      setTimeout(() => navigate("/login", { replace: true }), 1500);
-    } else {
-      toast.error(data.message || "Signup failed");
+      if (response.data.success) {
+        toast.success("Signup successful! Redirecting to Login...");
+        setTimeout(() => navigate("/login", { replace: true }), 1500);
+      } else {
+        toast.error(response.data.message || "Signup failed");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Network error. Try again!");
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    toast.error("Network error. Try again!");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -57,7 +53,7 @@ const Signup = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="mt-1 p-2 w-full border rounded-md"
+              className="mt-1 p-2 w-full border border-black rounded-md text-black"
             />
           </div>
           <div className="mb-4">
@@ -68,7 +64,7 @@ const Signup = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="mt-1 p-2 w-full border rounded-md"
+              className="mt-1 p-2 w-full border border-black rounded-md text-black"
             />
           </div>
           <div className="mb-4">
@@ -79,7 +75,7 @@ const Signup = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="mt-1 p-2 w-full border rounded-md"
+              className="mt-1 p-2 w-full border border-black rounded-md text-black"
             />
           </div>
           <button
@@ -95,7 +91,7 @@ const Signup = () => {
           Already have an account?{" "}
           <span
             className="text-blue-500 cursor-pointer"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/login")}
           >
             Login
           </span>
