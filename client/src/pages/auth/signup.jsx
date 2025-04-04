@@ -43,10 +43,10 @@ const Signup = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold text-center mb-4 text-blue-700">Sign Up</h2>
+        <h2 className="text-2xl font-bold text-center mb-4 text-gray-800">Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <label className="block text-gray-700">Name</label>
             <input
               type="text"
               name="name"
@@ -57,7 +57,7 @@ const Signup = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <label className="block  text-gray-700">Email</label>
             <input
               type="email"
               name="email"
@@ -68,7 +68,7 @@ const Signup = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <label className="block  text-gray-700">Password</label>
             <input
               type="password"
               name="password"

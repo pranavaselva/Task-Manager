@@ -31,6 +31,8 @@ const handleSubmit = async (e) => {
 
     if (response.status === 200) {
       alert("Login Successful! Redirecting...");
+      // console.log(data.token)
+      localStorage.setItem("token",data.token)
       navigate("/home"); // ✅ Redirect to Home page
     } else {
       setServerError(data.message || "Invalid credentials, try again!");
@@ -53,7 +55,7 @@ const handleSubmit = async (e) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-2 border rounded mt-1"
+              className="w-full p-2 border rounded mt-1 text-black"
               required
             />
             {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
@@ -66,7 +68,7 @@ const handleSubmit = async (e) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-2 border rounded mt-1"
+              className="w-full p-2 border rounded mt-1 text-black"
               required
             />
             {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}

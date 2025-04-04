@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dataBaseConnection = require("./db/connection");
 const userRoutes = require("./routes/userRoute"); // ✅ Import user routes
+const taskRoutes  = require("./routes/taskRoute")
 
 const app = express();
 app.use(express.json());
@@ -13,10 +14,10 @@ app.use(cors({
 }));
 
 
-app.use("/api",userRoutes);
 
 // ✅ Use userRoutes for handling API requests
 app.use("/api", userRoutes); 
+app.use("/apis", taskRoutes);
 
 app.get("/get", (req, res) => {
   res.send("Get request successful");

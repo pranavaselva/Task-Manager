@@ -2,6 +2,12 @@ const express = require("express");
 const User = require("../db/userSchema");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+
+
+verifyToken = require("../middlewares/jwt");
+
+
 
 //for siging up
 router.post('/signup', async (req, res) => {
@@ -33,6 +39,9 @@ router.post('/signup', async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error", error: err.message });
   }
 });
+
+
+  //login route
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -49,9 +58,17 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
+    const token = jwt.sign(
+      {userId : user._id },
+      process.env.JWT_KEY,
+      {expiresIn : process.env.JWT_EXPIRES_IN}
+    )
+  
     // If login is successful
-    res.status(200).json({ message: "Login successful", user: { name: user.name, email: user.email } });
-  } catch (error) {
+    res.status(200).json({ message: "Login successful", user: { name: user.name, email: user.email }, token });
+  }
+  
+  catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
