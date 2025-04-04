@@ -13,11 +13,15 @@ app.use(cors({
   credentials: true,  // Allow cookies & authentication headers
 }));
 
-
+app.use((err, req, res, next) => {
+  console.error("Internal Server Error:", err);
+  res.status(500).json({ message: "Something went wrong on the server" });
+});
 
 // ✅ Use userRoutes for handling API requests
-app.use("/api", userRoutes); 
-app.use("/apis", taskRoutes);
+app.use("/api/auth", userRoutes); 
+app.use("/api/task", taskRoutes);
+
 
 app.get("/get", (req, res) => {
   res.send("Get request successful");

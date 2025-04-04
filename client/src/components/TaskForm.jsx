@@ -3,25 +3,43 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 
 const TaskForm = ({ onSubmit, defaultValues = { title: "", description: "", priority: "medium", dueDate: undefined }, isEditing = false }) => {
-  const { register, handleSubmit, setValue, watch } = useForm({ defaultValues });
+  const { register, handleSubmit, setValue, watch, reset } = useForm({ defaultValues });
 
   const handleFormSubmit = async (data) => {
     try {
-      const token = localStorage.getItem("token"); // Get JWT token from local storage
+      console.log("Submitting Task:", data); 
 
-      const response = await axios.post("http://localhost:3000/api/tasks/create", data, {
-        headers: { Authorization: `Bearer ${token}` }, // Send token for authentication
+      const token = localStorage.getItem("token");
+
+      if (isEditing && !data.id) {
+        console.error("Error: Task ID is missing for update");
+        return;
+      }
+
+      const url = isEditing 
+        ? `http://localhost:3000/api/tasks/update/${data.id}`  // Ensure ID is present
+        : "http://localhost:3000/api/tasks/create";  
+
+      const method = isEditing ? "PATCH" : "POST";
+
+      const response = await axios({
+        method,
+        url,
+        data,
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      alert("Task Created Successfully");
-      onSubmit(response.data.task); // Pass the new task to parent component
+      alert(isEditing ? "Task Updated Successfully" : "Task Created Successfully");
+      onSubmit(response.data.task);
+
+      reset(); 
     } catch (error) {
-      console.error("Task Creation Error:", error.response?.data?.message || "Something went wrong");
+      console.error("Task Submission Error:", error.response?.data?.message || "Something went wrong");
     }
-  };
+};
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 animate-fade-in">
+    <form onSubmit={handleSubmit((data) => handleFormSubmit(data, reset))} className="space-y-6 animate-fade-in">
       <div>
         <label className="block text-sm font-medium">Task Title</label>
         <input {...register("title", { required: true })} placeholder="Enter task title" className="input input-bordered w-full" />

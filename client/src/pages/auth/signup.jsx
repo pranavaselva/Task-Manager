@@ -22,7 +22,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3000/api/signup", formData, {
+      const response = await axios.post("http://localhost:3000/api/auth/signup", formData, {
         withCredentials: true, // Ensure cookies/sessions work
         headers: { "Content-Type": "application/json" },
       });

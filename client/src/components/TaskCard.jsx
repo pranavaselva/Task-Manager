@@ -6,21 +6,13 @@ import { format } from 'date-fns';
 const TaskCard = ({ task, onEdit }) => {
   const { toggleTaskCompletion, deleteTask } = useTaskContext();
 
-  const getPriorityClass = () => {
-    switch (task.priority) {
-      case 'high':
-        return 'border-red-500';
-      case 'medium':
-        return 'border-yellow-500';
-      case 'low':
-        return 'border-green-500';
-      default:
-        return '';
-    }
-  };
-
   return (
-    <div className={`bg-white rounded-lg shadow-sm p-4 mb-4 transition-all duration-300 hover:shadow-md border-l-4 ${getPriorityClass()} ${task.completed ? 'opacity-70' : ''}`}>
+    <div className={`bg-white rounded-lg shadow-sm p-4 mb-4 border-l-4 ${
+      task.priority === 'high' ? 'border-red-500' :
+      task.priority === 'medium' ? 'border-yellow-500' :
+      task.priority === 'low' ? 'border-green-500' : ''
+    } ${task.completed ? 'opacity-70' : ''}`}>
+      
       <div className="flex items-start gap-3">
         <input 
           type="checkbox" 
@@ -44,7 +36,10 @@ const TaskCard = ({ task, onEdit }) => {
         </div>
         <div className="flex gap-2">
           <button 
-            onClick={() => onEdit(task)}
+            onClick={() => {
+              console.log("Editing Task:", task);  
+              onEdit(task);
+          }}
             className="btn btn-ghost btn-sm text-gray-500 hover:text-primary hover:bg-primary/10"
           >
             <Edit size={16} />

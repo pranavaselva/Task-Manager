@@ -23,7 +23,7 @@ const handleSubmit = async (e) => {
   setServerError(""); // ✅ Clear previous errors
 
   try {
-    const response = await axios.post("http://localhost:3000/api/login", formData, {
+    const response = await axios.post("http://localhost:3000/api/auth/login", formData, {
       headers: { "Content-Type": "application/json" },
     });
 
