@@ -5,17 +5,18 @@ const dataBaseConnection = require("./db/connection");
 const userRoutes = require("./routes/userRoute"); // ✅ Import user routes
 
 const app = express();
+app.use(express.json());
 
 app.use(cors({
   origin: "http://localhost:5173", // Allow frontend origin
   credentials: true,  // Allow cookies & authentication headers
 }));
 
-app.use(express.json());
+
 app.use("/api",userRoutes);
 
 // ✅ Use userRoutes for handling API requests
-app.use("/api", userRoutes); // ✅ Now, "/api/signup" will work
+app.use("/api", userRoutes); 
 
 app.get("/get", (req, res) => {
   res.send("Get request successful");
